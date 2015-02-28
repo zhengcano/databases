@@ -10,20 +10,25 @@ var connection = mysql.createConnection({
 module.exports = {
   messages: {
     get: function (req, res) {
-      connection.query('SELECT text, roomname FROM messages', function(err, result){
+      connection.query('SELECT users.username, messages.text, messages.messageid, messages.roomname FROM messages, users WHERE messages.userid = users.userid', function(err, result){
         console.log(result);
         res.writeHead(200);
-        res.end(JSON.stringify(result));
+        res.end(JSON.stringify({results: result}));
       });
 
 
 
     }, // a function which handles a get request for all messages
     post: function (req, res) {
+      console.log(req.body);
       connection.query('SELECT userid FROM users WHERE username = ' + mysql.escape(req.body.username), function(err, result){
         if (result.length === 0){
+          connection.query('INSERT INTO users SET ?', {username: req.body.username}, function(err, result){
+            connection.query('INSERT INTO messages SET ?', {text: req.body.text, userid: result.insertId, roomname: req.body.roomname}, function(err, result){
+            });
+          });
         } else {
-          connection.query('INSERT INTO messages SET ?', {text: req.body.message}, function(err, result){
+          connection.query('INSERT INTO messages SET ?', {text: req.body.text, userid: result[0].userid, roomname: req.body.roomname}, function(err, result){
           });
         }
       });
