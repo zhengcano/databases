@@ -34,10 +34,6 @@ module.exports = {
       });
       res.writeHead(201);
       res.end();
-      //Take data from the request
-      //  With the data:
-      //    Add the message to the message table
-      //
     } // a function which handles posting a message to the database
   },
 
