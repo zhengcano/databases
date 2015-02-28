@@ -1,6 +1,6 @@
 // YOUR CODE HERE:
 var app = {};
-app.server = 'https://api.parse.com/1/classes/chatterbox';
+app.server = 'http://localhost:3000';
 
 var lastDate = 0;
 var openRooms = {};
